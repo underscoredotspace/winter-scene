@@ -1,0 +1,29 @@
+body, html {
+  margin: 0;
+  overflow: hidden;
+}
+
+.star {
+  display: inline-block;
+  position: absolute;
+  filter: blur(1px)
+}
+
+.star-field {
+  position: absolute;
+  width: 100vw;
+  height: calc(100vh * (2 / 3));
+  background: black;
+}
+
+@keyframes twinkle {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
