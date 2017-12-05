@@ -3,14 +3,23 @@ body, html {
   overflow: hidden;
 }
 
-.star {
+svg.star, polygon.star, .star-field {
+  position: absolute; 
   display: inline-block;
-  position: absolute;
-  filter: blur(1px)
+  z-index: -1000
+}
+
+polygon.star {
+  filter: blur(1px);
+  fill: rgb(252, 252, 184);
+  stroke: none;
+}
+
+circle.snow {
+  fill: paleturquoise;
 }
 
 .star-field {
-  position: absolute;
   width: 100vw;
   height: calc(100vh * (2 / 3));
   background: black;

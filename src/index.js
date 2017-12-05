@@ -8,85 +8,118 @@ class WinterScene extends React.Component {
   render() {
     return (
       <div>
-        <StarField stars="200" />
+        <StarField />
+        <Snow />
       </div>
+    )
+  }
+}
+
+class Snow extends React.Component {
+  componentDidMount() {
+
+  }
+
+  render() {
+    const vb = `0 0 ${window.innerWidth} ${window.innerHeight}`
+    return (
+      <svg className="snow" xmlns={SVGNS} viewBox={vb}>
+        <circle className="snow" cx="100" cy="100" r="1"/>
+      </svg>
     )
   }
 }
 
 class StarField extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       stars: []
-    }
+    };
+  
+    window.addEventListener("resize", this.makeStars.bind(this));
   }
   
-  componentDidMount() { 
-    const rnd = (min, max) => Math.floor(Math.random()*(max-min+1)+min)
+  makeStars() {
+    this.starFieldElement = document.querySelector('.star-field')
+    const rnd = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
 
-    const width = window.innerWidth,
-      height = window.innerHeight*(2/3),
-      starDensity = (height*width)/2000,
+    const width = this.starFieldElement.clientWidth,
+      height = this.starFieldElement.clientHeight,
+      starDensity = height * width / 2000,
       stars = []
-    
-    for (let ndx=0; ndx<starDensity; ndx++) {
-      const {x, y, size, cycleTime, rotation} = {
-        x:rnd(-10, width), 
-        y:rnd(-10, height), 
-        size:rnd(1, 15),
-        cycleTime:rnd(5, 20),
-        rotation:rnd(0, 359)
-      }
-      stars.push(<Star x={x} y={y} size={size} 
-          rotation={rotation} 
-          cycleTime={cycleTime} 
-          key={`star-${ndx}`} />)
+
+    for (let ndx = 0; ndx < starDensity; ndx++) {
+      const { y, size, cycleTime, rotation } = {
+        y: rnd(-10, height),
+        size: rnd(1, 15),
+        cycleTime: rnd(5, 20),
+        rotation: rnd(0, 359)
+      };
+      stars.push(
+        <Star
+          x={rnd(-10, width)}
+          y={y}
+          size={size}
+          rotation={rotation}
+          cycleTime={cycleTime}
+          key={`star-${ndx}`}
+        />
+      );
     }
 
-    this.setState({stars})
+     this.setState({stars: []}, () => this.setState({stars}))
   }
   
+
+  componentDidMount() {
+    this.makeStars();
+  }
+
   render() {
     return (
       <div className="star-field">
         {this.state.stars}
       </div>
-      )
+    );
   }
 }
 
 class Star extends React.Component {
   constructor(props) {
-    super(props)
-    const s = props.size
-    
+    super(props);
+    const s = props.size;
+
     const starStyle = {
-      top: `${this.props.y}px`, 
-      left: `${this.props.x}px`, 
-      width: `{${this.props.size}px`, 
-      height: `${this.props.size}px`,
-      transform: `rotate(${this.props.rotation}deg)`,
-      animation: `twinkle ${this.props.cycleTime}s infinite`}
-    
+      top: `${props.y}px`,
+      left: `${props.x}px`,
+      width: `{${s}px`,
+      height: `${s}px`,
+      transform: `rotate(${props.rotation}deg)`,
+      animation: `twinkle ${props.cycleTime}s infinite`
+    };
+
     this.state = {
-      points: `0,${(s/3).toFixed(2)} ${s},${(s/3).toFixed(2)} ${(s/6).toFixed(2)},${s} ${(s/2).toFixed(2)},0 ${s-(s/6).toFixed(2)},${s}`,
-      colour: 'lightyellow',
-      starStyle
-    }
-    
+      points: `0,${(s / 3).toFixed(2)} ${s},${(s / 3).toFixed(2)} ${(s / 6
+      ).toFixed(2)},${s} ${(s / 2).toFixed(2)},0 ${s -
+        (s / 6).toFixed(2)},${s}`,
+      starStyle,
+      vb: `0 0 ${this.props.size} ${this.props.size}`
+    };
   }
   render() {
-    const vb = `0 0 ${this.props.size} ${this.props.size}`
-    return (<svg className="star" xmlns={SVGNS} style={this.state.starStyle} viewBox={vb}>
-        <polygon xmlns={SVGNS}
-          points={this.state.points}
-          fill='none' stroke={this.state.colour}>
-        </polygon>
-    </svg>)
+    return (
+      <svg
+        className="star"
+        xmlns={SVGNS}
+        style={this.state.starStyle}
+        viewBox={this.state.vb}
+      >
+        <polygon className="star" xmlns={SVGNS} points={this.state.points} />
+      </svg>
+    );
   }
 }
-
 
 ReactDOM.render(
   <WinterScene />, document.getElementById('root')
