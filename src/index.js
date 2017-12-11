@@ -3,12 +3,13 @@ import ReactDOM from 'react-dom'
 import './index.css'
 
 const SVGNS = 'http://www.w3.org/2000/svg'
+const rnd = (min, max) => Math.floor(Math.random() * (max - min + 1) + min)
 
 class WinterScene extends React.Component {
   render() {
     return (
       <div>
-        <StarField />
+        <Stars />
         <Snow />
       </div>
     )
@@ -16,38 +17,55 @@ class WinterScene extends React.Component {
 }
 
 class Snow extends React.Component {
-  componentDidMount() {
-
+  constructor(props) {
+    super(props)
+    this.state = {flakes:[]}
+    this.makeFlakes = this.makeFlakes.bind(this)
+    window.addEventListener("resize", this.makeFlakes)
   }
 
+  componentDidMount() {
+    this.makeFlakes()
+  }
+
+  makeFlakes() {
+    const width = window.innerWidth, 
+      snowDensity = window.innerWidth * width / 6000
+    let flakes = []
+    for(let ndx = 0; ndx < snowDensity; ndx++) {
+      const flake = {
+        "left":`${rnd(-30,width)}px`, 
+        "animationDuration": `${rnd(10,15)}s`,
+        "animationDelay": `${rnd(0,15)}s`,
+        "fontSize": `${rnd(10,25)}px`
+      }
+      flakes[ndx] = flake
+    }
+    this.setState({
+      flakes,
+      vb: `0 0 ${window.innerWidth} ${window.innerHeight}`
+    })
+  }
+  
   render() {
-    const vb = `0 0 ${window.innerWidth} ${window.innerHeight}`
     return (
-      <svg className="snow" xmlns={SVGNS} viewBox={vb}>
-        <circle className="snow" cx="100" cy="100" r="1"/>
-      </svg>
+      this.state.flakes.map((style, ndx) => 
+        <b className="snow-flake" style={style} key={`flake-${ndx}`}>*</b>
+       )
     )
   }
 }
 
-class StarField extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      stars: []
-    };
+class Stars extends React.Component {
+  state = {stars: []}
   
-    window.addEventListener("resize", this.makeStars.bind(this));
-  }
-  
-  makeStars() {
+  makeStars = () => {
     this.starFieldElement = document.querySelector('.star-field')
-    const rnd = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
 
     const width = this.starFieldElement.clientWidth,
       height = this.starFieldElement.clientHeight,
-      starDensity = height * width / 2000,
-      stars = []
+      starDensity = height * width / 5000
+    let stars = []
 
     for (let ndx = 0; ndx < starDensity; ndx++) {
       const { y, size, cycleTime, rotation } = {
@@ -55,7 +73,7 @@ class StarField extends React.Component {
         size: rnd(1, 15),
         cycleTime: rnd(5, 20),
         rotation: rnd(0, 359)
-      };
+      }
       stars.push(
         <Star
           x={rnd(-10, width)}
@@ -65,15 +83,15 @@ class StarField extends React.Component {
           cycleTime={cycleTime}
           key={`star-${ndx}`}
         />
-      );
+      )
     }
 
      this.setState({stars: []}, () => this.setState({stars}))
   }
   
-
   componentDidMount() {
-    this.makeStars();
+    this.makeStars()
+    window.addEventListener("resize", this.makeStars)
   }
 
   render() {
@@ -81,23 +99,23 @@ class StarField extends React.Component {
       <div className="star-field">
         {this.state.stars}
       </div>
-    );
+    )
   }
 }
 
 class Star extends React.Component {
   constructor(props) {
-    super(props);
-    const s = props.size;
+    super(props)
+    const s = props.size
 
     const starStyle = {
       top: `${props.y}px`,
       left: `${props.x}px`,
-      width: `{${s}px`,
+      width: `${s}px`,
       height: `${s}px`,
       transform: `rotate(${props.rotation}deg)`,
       animation: `twinkle ${props.cycleTime}s infinite`
-    };
+    }
 
     this.state = {
       points: `0,${(s / 3).toFixed(2)} ${s},${(s / 3).toFixed(2)} ${(s / 6
@@ -105,8 +123,9 @@ class Star extends React.Component {
         (s / 6).toFixed(2)},${s}`,
       starStyle,
       vb: `0 0 ${this.props.size} ${this.props.size}`
-    };
+    }
   }
+
   render() {
     return (
       <svg
@@ -117,7 +136,7 @@ class Star extends React.Component {
       >
         <polygon className="star" xmlns={SVGNS} points={this.state.points} />
       </svg>
-    );
+    )
   }
 }
 

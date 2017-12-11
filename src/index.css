@@ -5,7 +5,6 @@ body, html {
 
 svg.star, polygon.star, .star-field {
   position: absolute; 
-  display: inline-block;
   z-index: -1000
 }
 
@@ -13,10 +12,6 @@ polygon.star {
   filter: blur(1px);
   fill: rgb(252, 252, 184);
   stroke: none;
-}
-
-circle.snow {
-  fill: paleturquoise;
 }
 
 .star-field {
@@ -27,12 +22,42 @@ circle.snow {
 
 @keyframes twinkle {
   0% {
-    opacity: 1;
+    opacity: 0.3;
   }
   50% {
     opacity: 0;
   }
   100% {
-    opacity: 1;
+    opacity: 0.3;
+  }
+}
+
+.snow-flake {
+  position: absolute;
+  color: #DDF;
+  filter: blur(1px);
+  top: -50px;
+  animation: snow-fall linear infinite;
+}
+
+@keyframes snow-fall {
+  0% {
+    transform: translateX(-5px) translateY(0px);
+  }
+  
+  25% {
+    transform: translateX(5px)  translateY(25vh);
+  }
+  
+  50% {
+    transform: translateX(-5px) translateY(50vh);
+  }
+  
+  75% {
+    transform: translateX(5px) translateY(75vh);
+  }
+  
+  100% {
+    transform: translateX(-5px) translateY(calc(100vh + 50px));
   }
 }
