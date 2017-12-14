@@ -3,6 +3,13 @@ body, html {
   overflow: hidden;
 }
 
+svg.pine-tree {
+  position: absolute;
+  width: 150px;
+  height: 300px;
+  stroke-linecap: round;
+}
+
 svg.star, polygon.star, .star-field {
   position: absolute; 
   z-index: -1000

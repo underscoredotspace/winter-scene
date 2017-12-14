@@ -5,11 +5,86 @@ import './index.css'
 const SVGNS = 'http://www.w3.org/2000/svg'
 const rnd = (min, max) => Math.floor(Math.random() * (max - min + 1) + min)
 
+class PineTree extends React.Component {
+  state = {lines:[]}
+
+  setSize = () => {
+    this.outer = this.node.getBoundingClientRect()
+    const viewBox = `0 0 ${this.outer.width} ${this.outer.height}`
+    this.setState({viewBox})
+  }
+
+  getLine = (x1, y1, angle, length) => {
+    let {x2,y2} = this.lineEnd(x1, y1, angle, length)
+    return {x1,y1,x2,y2}
+  }
+
+  lineEnd = (x1, y1, angle, length) => {
+    angle = angle * Math.PI / 180
+    const x2 = x1 + (length * Math.sin(angle))
+    const y2 = y1 + (length * Math.cos(angle))
+    return {x2, y2}
+  }
+
+  componentDidMount() {
+    if (!this.node) {return}
+    let lines = []
+    this.setSize()
+
+    const trunkAngle = rnd(175,185),
+      trunkLength = rnd(this.outer.height*.75, this.outer.bottom*.9),
+      trunkStart = {x:this.outer.width/2, y:this.outer.height},
+      strokeWidth = this.outer.width/30
+
+    lines.push({...this.getLine(trunkStart.x, trunkStart.y, trunkAngle, trunkLength), strokeWidth})
+
+    const branches = this.outer.height/7
+    const segment = trunkLength/branches
+    
+    for (let angle of [[80,120], [240,280]]) {
+      for (let branch = 3; branch < branches-2; branch++) {
+        const posOnTrunk = rnd(segment*branch, segment*(branch+1))
+        const branchStart = this.lineEnd(trunkStart.x, trunkStart.y, trunkAngle, posOnTrunk)
+        const branchAngle = rnd(angle[0], angle[1])
+        const branchLength = (this.outer.width - branchStart.x2) * (1-(branch/branches))
+
+        lines.push({...this.getLine(branchStart.x2, branchStart.y2, branchAngle, branchLength), strokeWidth:strokeWidth/2, strokeOpacity: 0.75})
+        
+        const subBranches = branchLength/1.5
+        const subSegment = branchLength/subBranches
+          for (let subBranch = 0; subBranch < subBranches-1; subBranch++) {
+            const posOnBranch = rnd(subSegment*subBranch, subSegment*(subBranch+1))
+            const subBranchStart = this.lineEnd(branchStart.x2, branchStart.y2, branchAngle, posOnBranch)
+            const subBranchAngle = rnd(170,190)
+            const subBranchLength = rnd(trunkLength/15, trunkLength/30)
+    
+            lines.push({...this.getLine(subBranchStart.x2, subBranchStart.y2+(subBranchLength/2), subBranchAngle, subBranchLength), strokeWidth:strokeWidth/4, stroke: 'darkgreen'})
+        }
+      }
+    }
+
+    this.setState({lines})
+  }
+  
+  render = () => {
+    return (
+      <svg className="pine-tree" xmlns={SVGNS} viewBox={this.state.viewBox} ref={n=>this.node=n}>
+        {
+          this.state.lines.map((line, ndx) => {
+            return (<line stroke="SaddleBrown" {...line} key={`line-${ndx}`} />)
+          })
+        }
+      </svg>
+    )
+  }
+}
+
 class WinterScene extends React.Component {
   render() {
     return (
       <div>
         <Stars />
+        <PineTree />
         <Snow />
       </div>
     )
