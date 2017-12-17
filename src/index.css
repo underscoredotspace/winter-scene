@@ -5,8 +5,6 @@ body, html {
 
 svg.pine-tree {
   position: absolute;
-  width: 150px;
-  height: 300px;
   stroke-linecap: round;
 }
 
@@ -19,6 +17,12 @@ polygon.star {
   filter: blur(1px);
   fill: rgb(252, 252, 184);
   stroke: none;
+}
+
+.pine-trees {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
 }
 
 .star-field {
