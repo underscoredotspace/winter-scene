@@ -3,6 +3,10 @@ body, html {
   overflow: hidden;
 }
 
+#snow {
+  z-index: 1000;
+}
+
 svg.pine-tree {
   position: absolute;
   stroke-linecap: round;
@@ -19,10 +23,20 @@ polygon.star {
   stroke: none;
 }
 
-.pine-trees {
+svg.pine-tree {
   position: absolute;
-  width: 100vw;
-  height: 100vh;
+  z-index: -1;
+}
+
+.pine-trunk {
+  stroke: saddlebrown;
+  stroke-width: 1px;
+}
+
+.pine-needles {
+  stroke: darkgreen;
+  fill: none;
+  stroke-width: 1px;
 }
 
 .star-field {
@@ -40,35 +54,5 @@ polygon.star {
   }
   100% {
     opacity: 0.3;
-  }
-}
-
-.snow-flake {
-  position: absolute;
-  color: #DDF;
-  filter: blur(1px);
-  top: -50px;
-  animation: snow-fall linear infinite;
-}
-
-@keyframes snow-fall {
-  0% {
-    transform: translateX(-5px) translateY(0px);
-  }
-  
-  25% {
-    transform: translateX(5px)  translateY(25vh);
-  }
-  
-  50% {
-    transform: translateX(-5px) translateY(50vh);
-  }
-  
-  75% {
-    transform: translateX(5px) translateY(75vh);
-  }
-  
-  100% {
-    transform: translateX(-5px) translateY(calc(100vh + 50px));
   }
 }
