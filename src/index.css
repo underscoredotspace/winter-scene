@@ -18,8 +18,7 @@ svg.star, polygon.star, .star-field {
 }
 
 polygon.star {
-  filter: blur(1px);
-  fill: rgb(252, 252, 184);
+  fill: rgb(255, 255, 94);
   stroke: none;
 }
 
@@ -33,16 +32,22 @@ svg.pine-tree {
   stroke-width: 1px;
 }
 
-.pine-needles {
+.pine-needle {
   stroke: darkgreen;
   fill: none;
   stroke-width: 1px;
 }
 
+.snow-needle {
+  stroke: rgba(220,220,255,0.4);
+  fill: none;
+  stroke-width: 3px;
+}
+
 .star-field {
   width: 100vw;
   height: calc(100vh * (2 / 3));
-  background: black;
+  background: rgba(0,0,0,0.9);
 }
 
 @keyframes twinkle {

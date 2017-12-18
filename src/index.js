@@ -23,16 +23,16 @@ class Stars extends React.Component {
   makeStars = () => {
     this.width = this.node.clientWidth
     this.height = this.node.clientHeight
-    this.starDensity = this.height * this.width / 5000
+    this.starDensity = this.height * this.width / 7000
     
     let stars = []
     
     for (let ndx = 0; ndx < this.starDensity; ndx++) {
       stars.push({
-        x: rnd(-10, this.width),
-        y: rnd(-10, this.height),
-        size: rnd(10, 20),
-        cycleTime: rnd(10, 25),
+        x: rnd(-30, this.width),
+        y: rnd(-30, this.height),
+        size: rnd(15, 30),
+        cycleTime: rnd(5, 20),
         rotation: rnd(0, 359)
       })
     }
@@ -98,14 +98,12 @@ class PineTrees extends React.Component {
 
   componentDidMount() {
     const maxTreeH = 250
-    const minTreeH = 75
+    const minTreeH = 100
 
     const treeCount = window.innerWidth / 100
     const segment = window.innerWidth / treeCount
     const minBottom = window.innerHeight * (2/3)
     const maxBottom = window.innerHeight
-
-    console.log({treeCount})
 
     let trees = []
     for (let tree=0; tree<(treeCount+1); tree++) {
@@ -130,7 +128,7 @@ class PineTrees extends React.Component {
 }
 
 class PineTree extends React.Component {
-  state = {lines:[], polylines:[]}
+  state = {lines:[], polylines:[], snowLines:[]}
 
   setSize() {
     this.outer = this.node.getBoundingClientRect()
@@ -153,7 +151,7 @@ class PineTree extends React.Component {
   componentDidMount() {
     if (!this.node) {return}
     this.setSize()
-    let lines = [], polylines = []
+    let lines = [], polylines = [], snowLines = []
     
     const trunkAngle = rnd(175,185)
     const trunkLength = this.outer.height
@@ -181,12 +179,15 @@ class PineTree extends React.Component {
           const subBranchLength = this.outer.height / 20
           const polySeg = {...this.getLine(subBranchStart.x2, subBranchStart.y2+(subBranchLength/2), subBranchAngle, subBranchLength)}
           polyline += `${polySeg.x1},${polySeg.y1} ${polySeg.x2},${polySeg.y2} `
+          if (rnd(0,9)%3===0) {
+            snowLines.push(polySeg)
+          }
         }
         polylines.push(polyline)
       }
     }
 
-    this.setState({lines,polylines})
+    this.setState({lines,polylines,snowLines})
   }
   
   render = () => {
@@ -205,7 +206,11 @@ class PineTree extends React.Component {
           ))
         }{
           this.state.polylines.map((polyline, ndx) => (
-            <polyline className="pine-needles" points={polyline}  key={`polyline-${ndx}`} />
+            <polyline className="pine-needle" points={polyline}  key={`polyline-${ndx}`} />
+          ))
+        }{
+          this.state.snowLines.map((line, ndx) => (
+            <line className="snow-needle" {...line} key={`line-${ndx}`} />
           ))
         }
       </svg>
@@ -262,37 +267,33 @@ class Snow extends React.Component {
     }
   }
 
-  animate(fps) {
+  animate() {
     requestAnimationFrame(() => {
-      this.animate(fps)
-      const now = window.performance.now()
-      if ((now - this.lastFrame) < (1000/fps)) return
-      
-      this.ctx.fillStyle='rgba(220,220,255,0.8)'
+      this.animate()
+
       this.ctx.clearRect(0,0, this.canvas.width, this.canvas.height)
       for(let particle of this.particles) {
+        this.ctx.fillStyle=`rgba(220,220,255,${(particle.size/10)})`
         particle.update()
         particle.draw()
       }
-      this.lastFrame = now
     })
   }
 
   componentDidMount() {
     this.canvas = document.getElementById('snow')
     this.ctx = this.canvas.getContext('2d')
-    this.fps = 60
 
     window.addEventListener("resize", this.updateCanvasSize)
     this.updateCanvasSize()
 
     this.particles = []
 
-    const particleCount = (window.innerWidth*window.innerHeight) / 10000
+    const particleCount = (window.innerWidth*window.innerHeight) / 3000
     for (let particle=0; particle<particleCount; particle++) {
-      const dropSpeed = rnd(1000,3000)/1000
-      const wibbleAmount = rnd(100,300)/10
-      const wibbleSpeed = rnd(200,300)/1000
+      const dropSpeed = rnd(500,3000)/1000
+      const wibbleAmount = rnd(100,1000)/10
+      const wibbleSpeed = rnd(100,200)/1000
       const size = rnd(10,60)/10
       const pos = {y:rnd(0, this.canvas.height),x:rnd(-1, this.canvas.width+1)}
       this.particles.push(
@@ -300,8 +301,7 @@ class Snow extends React.Component {
       )
     }
 
-    this.lastFrame = window.performance.now()
-    this.animate(this.fps)
+    this.animate()
   }
 
   render = () => (<canvas id="snow"></canvas>)
@@ -310,121 +310,3 @@ class Snow extends React.Component {
 ReactDOM.render(
   <WinterScene />, document.getElementById('root')
 )
-
-/*
-class PineTrees extends React.Component  {
-  state = {trees:[]}
-
-  componentDidMount() {
-    let trees = []
-    this.outer = this.node.getBoundingClientRect()
-    const treeCount = 10
-    const treeWidth = this.outer.width / treeCount
-    const segment = this.outer.width / treeCount
-    const baseHeight = this.outer.height/4
-
-    for (let tree = 0; tree < treeCount-1; tree++) {
-      const left = rnd(segment*tree, segment*(tree+1))
-      const bottom = rnd(((this.outer.height/3)*2)+20, this.outer.height-20)
-      const height = baseHeight * (bottom/this.outer.height)
-      const width = treeWidth * (bottom/this.outer.height)
-      const top = bottom - height
-
-      trees.push({left,top,height,width})
-    }
-
-    this.setState({trees})
-  }
-
-  render() {
-    return (
-      <div className="pine-trees" ref={n=>(this.node=n)}>
-      {
-        this.state.trees.map((tree, ndx) => 
-          <PineTree {...tree} key={`tree-${ndx}`} />
-        )
-      }
-      </div>
-    )
-  }
-}
-
-class PineTree extends React.Component {
-  state = {lines:[], treeStyle: {
-    width: `${this.props.width}px`,
-    height: `${this.props.height}px`,
-    left: `${this.props.left}px`,
-    top: `${this.props.top}px`
-  }}
-
-  setSize = () => {
-    this.outer = this.node.getBoundingClientRect()
-    const viewBox = `0 0 ${this.outer.width} ${this.outer.height}`
-    this.setState({viewBox})
-  }
-
-  getLine = (x1, y1, angle, length) => {
-    let {x2,y2} = this.lineEnd(x1, y1, angle, length)
-    return {x1,y1,x2,y2}
-  }
-
-  lineEnd = (x1, y1, angle, length) => {
-    angle = angle * Math.PI / 180
-    const x2 = x1 + (length * Math.sin(angle))
-    const y2 = y1 + (length * Math.cos(angle))
-    return {x2, y2}
-  }
-
-  componentDidMount() {
-    if (!this.node) {return}
-    let lines = []
-    this.setSize()
-
-    const trunkAngle = rnd(175,185),
-      trunkLength = this.outer.height, //rnd(this.outer.height*.75, this.outer.height*.9),
-      trunkStart = {x:this.outer.width/2, y:this.outer.height},
-      strokeWidth = this.outer.width/30
-
-    lines.push({...this.getLine(trunkStart.x, trunkStart.y, trunkAngle, trunkLength), strokeWidth})
-
-    const branches = this.outer.height/5
-    const segment = trunkLength/branches
-    
-    for (let angle of [[85,95], [265,275]]) {
-      for (let branch = 3; branch < branches-2; branch++) {
-        const posOnTrunk = rnd(segment*branch, segment*(branch+1))
-        const branchStart = this.lineEnd(trunkStart.x, trunkStart.y, trunkAngle, posOnTrunk)
-        const branchAngle = rnd(angle[0], angle[1])
-        const branchLength = (this.outer.width - branchStart.x2) * (1-(branch/branches))
-
-        lines.push({...this.getLine(branchStart.x2, branchStart.y2, branchAngle, branchLength), strokeWidth:strokeWidth/4, stroke: 'saddlebrown'})
-        
-        const subBranches = branchLength/1.5
-        const subSegment = branchLength/subBranches
-          for (let subBranch = 0; subBranch < subBranches-1; subBranch++) {
-            const posOnBranch = rnd(subSegment*subBranch, subSegment*(subBranch+1))
-            const subBranchStart = this.lineEnd(branchStart.x2, branchStart.y2, branchAngle, posOnBranch)
-            const subBranchAngle = rnd(170,190)
-            const subBranchLength = rnd(trunkLength/10, trunkLength/15)
-    
-            lines.push({...this.getLine(subBranchStart.x2, subBranchStart.y2+(subBranchLength/2), subBranchAngle, subBranchLength), strokeWidth:strokeWidth/5, stroke: '#003200'})
-        }
-      }
-    }
-
-    this.setState({lines})
-  }
-  
-  render = () => {
-    return (
-      <svg className="pine-tree" xmlns={SVGNS} style={this.state.treeStyle} viewBox={this.state.viewBox} ref={n=>this.node=n}>
-        {
-          this.state.lines.map((line, ndx) => {
-            return (<line stroke="#505000" {...line} key={`line-${ndx}`} />)
-          })
-        }
-      </svg>
-    )
-  }
-}
-*/
