@@ -5,12 +5,14 @@
   "dependencies": {
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "react-scripts": "1.0.17",
-    "serve": "^6.4.2"
+    "parcel-bundler": "^1.2.1",
+    "babel-preset-react-app": "^3.1.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build && serve -s build",
-    "eject": "react-scripts eject"
+    "start": "parcel src/index.html",
+    "build": "parcel build src/index.html --public-url /"
+  },
+  "babel": {
+    "presets": ["react-app"]
   }
 }

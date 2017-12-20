@@ -1,6 +1,5 @@
 import React from 'react'
-const SVGNS = 'http://www.w3.org/2000/svg'
-const rnd = (min, max) => Math.floor(Math.random() * (max - min + 1) + min)
+import {rnd, SVGNS} from './globals'
 
 export default class Stars extends React.Component {
     state = {stars: []}

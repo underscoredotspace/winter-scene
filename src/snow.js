@@ -1,5 +1,5 @@
 import React from 'react'
-const rnd = (min, max) => Math.floor(Math.random() * (max - min + 1) + min)
+import {rnd} from './globals'
 
 
 class SnowParticle {
@@ -65,7 +65,7 @@ export default class Snow extends React.Component {
     }
 
     componentDidMount = () => {
-        if (!this.canvas) return
+        if (!this.hasOwnProperty('canvas')) return
         this.ctx = this.canvas.getContext('2d')
 
         window.addEventListener("resize", this.updateCanvasSize)
