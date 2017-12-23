@@ -1,38 +1,66 @@
 import React from 'react'
 import {rnd, SVGNS} from './globals'
 
-export default class PineTrees extends React.Component {
-    state = {trees:[]}
-  
-    componentDidMount = () => {
-      const maxTreeH = 250
-      const minTreeH = 100
-  
-      const treeCount = window.innerWidth / 100
-      const segment = window.innerWidth / treeCount
-      const minBottom = window.innerHeight * (2/3)
-      const maxBottom = window.innerHeight
-  
-      let trees = []
-      for (let tree=0; tree<(treeCount+1); tree++) {
-        const size = rnd(minTreeH,maxTreeH)
-        const left = rnd(segment*(tree-1), segment*tree)
-        const ratio = (size-minTreeH) / (maxTreeH-minTreeH)
-        const bottom = minBottom + (ratio * (maxBottom-minBottom))
-        const top = bottom-size
-        trees.push({left, top, size})
-      }
-      this.setState({trees})
+export class PineTrees extends React.Component {
+  state = {trees:[]}
+
+  componentDidMount = () => {
+    const maxTreeH = 250
+    const minTreeH = 100
+
+    const treeCount = window.innerWidth / 100
+    const segment = window.innerWidth / treeCount
+    const minBottom = window.innerHeight * (2/3)
+    const maxBottom = window.innerHeight
+
+    let trees = []
+    for (let tree=0; tree<(treeCount+1); tree++) {
+      const size = rnd(minTreeH,maxTreeH)
+      const left = rnd(segment*(tree-1), segment*tree)
+      const ratio = (size-minTreeH) / (maxTreeH-minTreeH)
+      const bottom = minBottom + (ratio * (maxBottom-minBottom))
+      const top = bottom-size
+      trees.push({left, top, size})
     }
-  
-    render = () => (
-      <div className="pineTrees">
-        {this.state.trees.map((tree, ndx) => (
-          <PineTree {...tree} key={`tree-${ndx}`} />
-        ))}
-      </div>
-    )
+    this.setState({trees})
   }
+
+  render = () =>
+    <div className="pine-trees">
+      {this.state.trees.map((tree, ndx) => (
+        <PineTree {...tree} key={`tree-${ndx}`} />
+      ))}
+    </div>
+}
+
+export class MobileTree extends React.Component {
+  state = {trees:[]}
+
+  componentDidMount = () => {
+    let trees = []
+    const h = window.innerHeight
+    const w = window.innerWidth
+    const snow = h * (2/3)
+
+    const size = 350
+    const treeWidth = (size / 250) * 200
+    const left = (w/2) - (treeWidth/2)
+    const top = snow + ((h-snow)/2) - size
+
+    trees.push({
+      left, top,
+      size
+    })
+    this.setState({trees})
+  }
+
+  render = () => 
+    <div className="pine-trees">
+      {this.state.trees.map((tree, ndx) => (
+        <PineTree {...tree} key={`tree-${ndx}`} />
+      ))}
+    </div>
+}
   
   class PineTree extends React.Component {
     state = {lines:[], polylines:[], snowLines:[]}

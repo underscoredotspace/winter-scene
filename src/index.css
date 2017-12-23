@@ -5,6 +5,8 @@ body, html {
 
 #snow {
   z-index: 1000;
+  width: 100vw;
+  height: 100vh;
 }
 
 .pine-trees {
