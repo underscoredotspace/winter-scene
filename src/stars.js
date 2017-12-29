@@ -49,7 +49,7 @@ export default class Stars extends React.Component {
         width: `${s}px`,
         height: `${s}px`,
         transform: `rotate(${props.rotation}deg)`,
-        animation: `twinkle ${props.cycleTime}s infinite`
+        animationDuration: `${props.cycleTime}s`
       }
   
       const points = `0,${(s / 3).toFixed(2)} 

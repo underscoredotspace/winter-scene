@@ -42,8 +42,8 @@ export class MobileTree extends React.Component {
     const w = window.innerWidth
     const snow = h * (2/3)
 
-    const size = 350
-    const treeWidth = (size / 250) * 200
+    const size = 250
+    const treeWidth = 200
     const left = (w/2) - (treeWidth/2)
     const top = snow + ((h-snow)/2) - size
 

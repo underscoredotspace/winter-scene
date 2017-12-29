@@ -3,24 +3,21 @@ body, html {
   overflow: hidden;
 }
 
+div, canvas, svg {
+  position: absolute;
+}
+
 #snow {
   z-index: 1000;
   width: 100vw;
   height: 100vh;
 }
 
-.pine-trees {
-  position: absolute;
-  z-index: -1;
-}
-
 svg.pine-tree {
-  position: absolute;
   stroke-linecap: round;
 }
 
 svg.star, polygon.star, .star-field {
-  position: absolute; 
   z-index: -1000
 }
 
@@ -52,14 +49,19 @@ polygon.star {
   background: rgba(0,0,0,0.9);
 }
 
+.star {
+  animation-name: twinkle;
+  animation-iteration-count: infinite;
+}
+
 @keyframes twinkle {
   0% {
-    opacity: 0.3;
+    opacity: 0.2;
   }
   50% {
     opacity: 0;
   }
   100% {
-    opacity: 0.3;
+    opacity: 0.2;
   }
 }

@@ -57,7 +57,7 @@ export default class Snow extends React.Component {
 
         this.ctx.clearRect(0,0, this.canvas.width, this.canvas.height)
         for(let particle of this.particles) {
-            this.ctx.fillStyle=`rgba(220,220,255,${(particle.size/10)})`
+            this.ctx.fillStyle=`rgba(220,220,255,${(particle.size/9)})`
             particle.update()
             particle.draw()
         }
