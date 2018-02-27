@@ -1,0 +1,98 @@
+body, html {
+  margin: 0;
+  overflow: hidden;
+}
+
+#snow {
+  z-index: 1000;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+svg.pine-tree {
+  stroke-linecap: round;
+}
+
+polygon.star {
+  fill: rgb(255, 255, 94);
+  stroke: none;
+}
+
+#trees {
+  display: flex;
+  flex-flow: row nowrap;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  align-items: flex-end;
+}
+
+.pine-tree {
+  display: grid;
+  align-content: end;
+  height: 30vh;
+  flex: 1;
+  transform-origin: bottom center;
+
+  svg {
+    max-height: 30vh;
+    min-height: auto;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  .pine-trunk {
+    stroke: saddlebrown;
+    stroke-width: 1px;
+  }
+  
+  .pine-needle {
+    stroke: darkgreen;
+    fill: none;
+    stroke-width: 1px;
+  }
+  .snow-needle {
+    stroke: white;
+    stroke-width: 1px;
+  }
+}
+
+@media (max-width: 420px) {
+  #trees .pine-tree {
+    display: none;
+  }
+
+  #trees :first-child {
+    display: grid;
+    transform: none !important;
+  }
+}
+
+.star-field {
+  width: 100vw;
+  height: 70vh;
+  background: rgba(0,0,0,0.9);
+}
+
+.star {
+  position: absolute;
+  animation-name: twinkle;
+  animation-iteration-count: infinite;
+}
+
+@keyframes twinkle {
+  0% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0.2;
+  }
+}

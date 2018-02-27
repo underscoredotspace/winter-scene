@@ -2,34 +2,38 @@ import React from 'react'
 import {rnd, SVGNS} from './globals'
 
 export default class Stars extends React.Component {
-    state = {stars: []}
+  constructor(props) {
+    super(props)
+    this.state = {stars: []}
+  }
     
-    makeStars = () => {
-      this.width = this.node.clientWidth
-      this.height = this.node.clientHeight
-      this.starDensity = this.height * this.width / 7000
-      
-      let stars = []
-      
-      for (let ndx = 0; ndx < this.starDensity; ndx++) {
-        stars.push({
-          x: rnd(-30, this.width),
-          y: rnd(-30, this.height-30),
-          size: rnd(15, 30),
-          cycleTime: rnd(5, 20),
-          rotation: rnd(0, 359)
-        })
-      }
-      
-      this.setState({stars})
+  makeStars() {
+    this.width = this.node.clientWidth
+    this.height = this.node.clientHeight
+    this.starDensity = this.height * this.width / 7000
+    
+    let stars = []
+    
+    for (let ndx = 0; ndx < this.starDensity; ndx++) {
+      stars.push({
+        x: rnd(-30, this.width),
+        y: rnd(-30, this.height-30),
+        size: rnd(15, 30),
+        cycleTime: rnd(5, 20),
+        rotation: rnd(0, 359)
+      })
     }
-  
-    componentDidMount = () => {
-       window.addEventListener("resize", this.makeStars)
-       this.makeStars()
-    }
-  
-    render = () =>(
+    
+    this.setState({stars})
+  }
+
+  componentDidMount() {
+    window.addEventListener("resize", this.makeStars)
+    this.makeStars()
+  }
+
+  render() {
+    return (
       <div className="star-field" ref={n=>(this.node=n)}>
         {this.state.stars.map((star, ndx) => (
           <Star {...star} key={`star-${ndx}`} />
@@ -37,37 +41,40 @@ export default class Stars extends React.Component {
       </div>
     )
   }
+}
   
-  class Star extends React.Component {
-    constructor(props) {
-      super(props)
-      const s = props.size
-  
-      const starStyle = {
-        top: `${props.y}px`,
-        left: `${props.x}px`,
-        width: `${s}px`,
-        height: `${s}px`,
-        transform: `rotate(${props.rotation}deg)`,
-        animationDuration: `${props.cycleTime}s`
-      }
-  
-      const points = `0,${(s / 3).toFixed(2)} 
-        ${s},${(s / 3).toFixed(2)} 
-        ${(s / 6).toFixed(2)},${s} 
-        ${(s / 2).toFixed(2)},0 
-        ${s - (s / 6).toFixed(2)},${s}`
-  
-      this.state = {
-        points,
-        starStyle,
-        vb: `0 0 ${this.props.size} ${this.props.size}`
-      }
+class Star extends React.Component {
+  constructor(props) {
+    super(props)
+    const s = props.size
+
+    const starStyle = {
+      top: `${props.y}px`,
+      left: `${props.x}px`,
+      width: `${s}px`,
+      height: `${s}px`,
+      transform: `rotate(${props.rotation}deg)`,
+      animationDuration: `${props.cycleTime}s`
     }
-  
-    render = ()  => (
+
+    const points = `0,${(s / 3).toFixed(2)} 
+      ${s},${(s / 3).toFixed(2)} 
+      ${(s / 6).toFixed(2)},${s} 
+      ${(s / 2).toFixed(2)},0 
+      ${s - (s / 6).toFixed(2)},${s}`
+
+    this.state = {
+      points,
+      starStyle,
+      vb: `0 0 ${this.props.size} ${this.props.size}`
+    }
+  }
+
+  render() {
+    return (
       <svg className="star" xmlns={SVGNS} style={this.state.starStyle} viewBox={this.state.vb}>
         <polygon className="star" xmlns={SVGNS} points={this.state.points} />
       </svg>
     )
   }
+}

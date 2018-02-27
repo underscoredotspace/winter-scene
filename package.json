@@ -1,16 +1,23 @@
 {
   "name": "winter-scene",
-  "version": "0.1.0",
+  "version": "0.2.0",
+  "description": "A snowy, starry winter scene",
+  "repository": "https://github.com/underscoredotspace/winter-scene",
+  "author": "Colin Tindle <ampersand@underscore.space>",
+  "main": "src/index.js",
   "private": true,
+  "license": "CC-BY-4.0",
   "dependencies": {
-    "babel-preset-react-app": "^3.1.0",
-    "parcel-bundler": "^1.2.1",
+    "babel-preset-react-app": "^3.1.1",
+    "parcel-bundler": "^1.6.2",
     "react": "^16.2.0",
-    "react-dom": "^16.2.0"
+    "react-dom": "^16.2.0",
+    "node-sass": "^4.7.2"
   },
   "scripts": {
     "start": "parcel src/index.html",
-    "build": "parcel build src/index.html --public-url ./"
+    "build": "parcel build src/index.html --public-url ./ --detailed-report",
+    "test": "echo \"No tests. Sorry\""
   },
   "babel": {
     "presets": [
