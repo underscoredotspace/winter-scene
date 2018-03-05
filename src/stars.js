@@ -46,34 +46,25 @@ export default class Stars extends React.Component {
 class Star extends React.Component {
   constructor(props) {
     super(props)
-    const s = props.size
 
     const starStyle = {
       top: `${props.y}px`,
       left: `${props.x}px`,
-      width: `${s}px`,
-      height: `${s}px`,
+      width: `${props.size}px`,
+      height: `${props.size}px`,
       transform: `rotate(${props.rotation}deg)`,
       animationDuration: `${props.cycleTime}s`
     }
 
-    const points = `0,${(s / 3).toFixed(2)} 
-      ${s},${(s / 3).toFixed(2)} 
-      ${(s / 6).toFixed(2)},${s} 
-      ${(s / 2).toFixed(2)},0 
-      ${s - (s / 6).toFixed(2)},${s}`
-
     this.state = {
-      points,
-      starStyle,
-      vb: `0 0 ${this.props.size} ${this.props.size}`
+      starStyle
     }
   }
 
   render() {
     return (
-      <svg className="star" xmlns={SVGNS} style={this.state.starStyle} viewBox={this.state.vb}>
-        <polygon className="star" xmlns={SVGNS} points={this.state.points} />
+      <svg className="star" xmlns={SVGNS} style={this.state.starStyle} viewBox="0 0 30 30">
+        <polygon className="star" points="0,10.00 30,10.00 5.00,30 15.00,0 25,30"></polygon>
       </svg>
     )
   }

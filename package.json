@@ -4,7 +4,6 @@
   "description": "A snowy, starry winter scene",
   "repository": "https://github.com/underscoredotspace/winter-scene",
   "author": "Colin Tindle <ampersand@underscore.space>",
-  "main": "src/index.js",
   "private": true,
   "license": "CC-BY-4.0",
   "dependencies": {
