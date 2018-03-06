@@ -18,7 +18,7 @@ export default class Stars extends React.Component {
       const size = rnd(2,20)
       stars.push({
         x: `calc(${rnd(0,100)}% - ${size/2}px)`,
-        y: `calc(${rnd(0,100)}% - ${size/2}px)`,
+        y: `calc(${rnd(0,70)}% - ${size/2}px)`,
         size,
         cycleTime: rnd(5, 20),
         rotation: rnd(0, 359)
