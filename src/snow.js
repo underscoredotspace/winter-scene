@@ -38,6 +38,10 @@ class SnowParticle {
 }
   
 export default class Snow extends React.Component {
+  constructor(props) {
+    super(props)
+    this.updateCanvasSize = this.updateCanvasSize.bind(this)
+  }
   updateCanvasSize() {
     this.canvas.width = window.innerWidth
     this.canvas.height = window.innerHeight
